@@ -3,6 +3,8 @@
 نظام يعتمد على **ESP32** لمراقبة البيئة عبر حساس اللهب. عند اكتشاف حريق يقوم النظام تلقائياً بتشغيل إنذار (LED + Buzzer) وتفعيل مضخة المياه عبر الريليه، مع إرسال حالة النظام إلى تطبيق الهاتف (Blynk) عبر Wi-Fi، ما يتيح المراقبة والتحكم بالمضخة عن بُعد.
 
 > 📋 راجع [`PLAN.md`](PLAN.md) للخطة الكاملة: المكونات، مخطط التوصيل، مراحل التنفيذ، واعتبارات السلامة.
+>
+> 🖥️ **لا تملك المكونات؟** جرّب المشروع كاملاً في المتصفح بدون شراء أي قطعة عبر محاكي Wokwi — انظر [`firmware/fire_detection_wokwi/`](firmware/fire_detection_wokwi/).
 
 ---
 
@@ -16,10 +18,14 @@ firmware/
 │   ├── fire_detection.ino     # الكود الرئيسي (آلة الحالات + Blynk)
 │   ├── config.h               # أرقام المنافذ (Pins) وإعدادات التوقيت
 │   └── secrets.h.example      # قالب بيانات Wi-Fi وBlynk
-└── fire_detection_mqtt/       # النسخة 2: MQTT (معيار صناعي، يعمل محلياً بدون إنترنت)
-    ├── fire_detection_mqtt.ino
-    ├── config.h               # المنافذ + أسماء الـ Topics
-    └── secrets.h.example      # قالب بيانات Wi-Fi والـ Broker
+├── fire_detection_mqtt/       # النسخة 2: MQTT (معيار صناعي، يعمل محلياً بدون إنترنت)
+│   ├── fire_detection_mqtt.ino
+│   ├── config.h               # المنافذ + أسماء الـ Topics
+│   └── secrets.h.example      # قالب بيانات Wi-Fi والـ Broker
+└── fire_detection_wokwi/      # النسخة 3: محاكاة في المتصفح (بدون مكونات فعلية)
+    ├── sketch.ino             # نسخة قائمة بذاتها بدون شبكة
+    ├── diagram.json           # دائرة Wokwi جاهزة
+    └── README.md              # خطوات التشغيل على wokwi.com
 ```
 
 | | نسخة Blynk | نسخة MQTT |
