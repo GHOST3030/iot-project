@@ -8,12 +8,25 @@
 
 ## هيكل المشروع
 
+يتوفر الـ firmware بنسختين — نفس منطق الاكتشاف والإطفاء، تختلفان فقط في طبقة الاتصال. ارفع **واحدة فقط** على اللوحة:
+
 ```
-firmware/fire_detection/
-├── fire_detection.ino    # الكود الرئيسي (آلة الحالات + Blynk)
-├── config.h              # أرقام المنافذ (Pins) وإعدادات التوقيت
-└── secrets.h.example     # قالب بيانات Wi-Fi وBlynk (انسخه إلى secrets.h)
+firmware/
+├── fire_detection/            # النسخة 1: Blynk (الأسرع للنموذج الأولي)
+│   ├── fire_detection.ino     # الكود الرئيسي (آلة الحالات + Blynk)
+│   ├── config.h               # أرقام المنافذ (Pins) وإعدادات التوقيت
+│   └── secrets.h.example      # قالب بيانات Wi-Fi وBlynk
+└── fire_detection_mqtt/       # النسخة 2: MQTT (معيار صناعي، يعمل محلياً بدون إنترنت)
+    ├── fire_detection_mqtt.ino
+    ├── config.h               # المنافذ + أسماء الـ Topics
+    └── secrets.h.example      # قالب بيانات Wi-Fi والـ Broker
 ```
+
+| | نسخة Blynk | نسخة MQTT |
+|---|---|---|
+| تطبيق الهاتف | Blynk (جاهز) | أي تطبيق MQTT Dashboard (مثل IoT MQTT Panel) أو Home Assistant |
+| المكتبة المطلوبة | Blynk | PubSubClient |
+| يحتاج إنترنت للمراقبة | نعم (سحابة Blynk) | لا، مع Broker محلي على شبكتك |
 
 ## خطوات التشغيل
 
@@ -48,6 +61,45 @@ cp secrets.h.example secrets.h
 1. افتح `fire_detection.ino` في Arduino IDE.
 2. اختر اللوحة: **ESP32 Dev Module** والمنفذ الصحيح.
 3. اضغط **Upload**، ثم افتح **Serial Monitor** على 115200 لمتابعة السجل.
+
+---
+
+## البديل: نسخة MQTT
+
+إن كنت تفضّل MQTT بدل Blynk (تحكم كامل، يعمل على شبكتك المحلية بدون إنترنت):
+
+### 1. جهّز الـ Broker
+- **محلي (موصى به):** ثبّت [Mosquitto](https://mosquitto.org/download/) على جهاز كمبيوتر أو Raspberry Pi على نفس الشبكة، وسجّل عنوان IP الخاص به.
+- **سحابي للتجربة السريعة:** استخدم `broker.hivemq.com` بالمنفذ 1883 (عام وغير مشفّر — للتجارب فقط).
+
+### 2. جهّز الكود
+1. من **Library Manager** ثبّت مكتبة **PubSubClient** (by Nick O'Leary).
+2. ```bash
+   cd firmware/fire_detection_mqtt
+   cp secrets.h.example secrets.h
+   # عدّل secrets.h: بيانات Wi-Fi وعنوان الـ Broker
+   ```
+3. افتح `fire_detection_mqtt.ino` وارفعه على اللوحة.
+
+### 3. جهّز تطبيق الهاتف
+ثبّت تطبيق **IoT MQTT Panel** (أندرويد) أو أي MQTT Dashboard، واربطه بنفس الـ Broker، ثم أضف عناصر على هذه الـ Topics:
+
+| Topic | الاتجاه | القيم | عنصر مقترح |
+|---|---|---|---|
+| `firesystem/state` | من الجهاز | NORMAL / FIRE / COOLDOWN | Text |
+| `firesystem/flame` | من الجهاز | 0–4095 | Gauge |
+| `firesystem/pump` | من الجهاز | ON / OFF | LED |
+| `firesystem/availability` | من الجهاز | online / offline | LED |
+| `firesystem/alert` | من الجهاز | رسالة الإنذار | Notification |
+| `firesystem/cmd/mode` | إلى الجهاز | AUTO / MANUAL | Switch |
+| `firesystem/cmd/pump` | إلى الجهاز | ON / OFF | Switch (يعمل في الوضع اليدوي) |
+
+للتجربة من سطر الأوامر بدون تطبيق:
+```bash
+mosquitto_sub -h <BROKER_IP> -t "firesystem/#" -v          # مراقبة كل شيء
+mosquitto_pub -h <BROKER_IP> -t "firesystem/cmd/mode" -m MANUAL
+mosquitto_pub -h <BROKER_IP> -t "firesystem/cmd/pump" -m ON
+```
 
 ## كيف يعمل النظام
 

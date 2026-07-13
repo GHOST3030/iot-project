@@ -1,5 +1,5 @@
-# Credentials — never commit real secrets
-firmware/fire_detection/secrets.h
+# Credentials — never commit real secrets (covers all firmware variants)
+**/secrets.h
 
 # Build artifacts
 build/
