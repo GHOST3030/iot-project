@@ -1,0 +1,15 @@
+# Credentials — never commit real secrets
+firmware/fire_detection/secrets.h
+
+# Build artifacts
+build/
+*.bin
+*.elf
+
+# PlatformIO
+.pio/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
