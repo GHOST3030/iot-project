@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "author": "Smart Fire Detection MVP",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-slide-switch",
+      "id": "flameSwitch",
+      "top": -80,
+      "left": -150,
+      "attrs": { "value": "0" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "alarmLed",
+      "top": -90,
+      "left": 200,
+      "attrs": { "color": "red", "label": "ALARM" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rAlarm",
+      "top": -20,
+      "left": 200,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer",
+      "top": 60,
+      "left": 260,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay",
+      "top": 180,
+      "left": 200,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "pumpLed",
+      "top": 180,
+      "left": 380,
+      "attrs": { "color": "green", "label": "PUMP" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rPump",
+      "top": 250,
+      "left": 380,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "" ],
+    [ "esp:RX0", "$serialMonitor:TX", "" ],
+
+    [ "flameSwitch:2", "esp:D27", "orange", [] ],
+    [ "flameSwitch:1", "esp:GND.1", "black", [] ],
+
+    [ "esp:D26", "rAlarm:1", "red", [] ],
+    [ "rAlarm:2", "alarmLed:A", "red", [] ],
+    [ "alarmLed:C", "esp:GND.1", "black", [] ],
+
+    [ "esp:D25", "buzzer:2", "purple", [] ],
+    [ "buzzer:1", "esp:GND.1", "black", [] ],
+
+    [ "esp:D33", "relay:IN", "blue", [] ],
+    [ "esp:VIN", "relay:VCC", "red", [] ],
+    [ "esp:GND.2", "relay:GND", "black", [] ],
+
+    [ "esp:3V3", "relay:COM", "green", [] ],
+    [ "relay:NO", "pumpLed:A", "green", [] ],
+    [ "pumpLed:C", "rPump:1", "black", [] ],
+    [ "rPump:2", "esp:GND.2", "black", [] ]
+  ]
+}

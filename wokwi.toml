@@ -1,0 +1,7 @@
+# Wokwi simulator configuration (used by the Wokwi VS Code extension
+# and the Wokwi CLI). It points the simulator at the firmware that
+# PlatformIO builds.
+[wokwi]
+version = 1
+firmware = ".pio/build/esp32dev/firmware.bin"
+elf = ".pio/build/esp32dev/firmware.elf"
