@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "author": "Smart Fire Detection System",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-pushbutton", "id": "flameBtn", "top": -120, "left": -220, "attrs": { "color": "red", "label": "Flame" } },
+    { "type": "wokwi-led", "id": "ledRed", "top": -100, "left": 200, "attrs": { "color": "red", "label": "Alarm" } },
+    { "type": "wokwi-led", "id": "ledGreen", "top": 0, "left": 200, "attrs": { "color": "green", "label": "Normal" } },
+    { "type": "wokwi-resistor", "id": "rRed", "top": -100, "left": 120, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "rGreen", "top": 0, "left": 120, "attrs": { "value": "220" } },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": 100, "left": 200, "attrs": { "volume": "0.1" } },
+    { "type": "wokwi-relay-module", "id": "relay", "top": 180, "left": -240, "attrs": {} }
+  ],
+  "connections": [
+    [ "flameBtn:1.l", "esp:D34", "green", [] ],
+    [ "flameBtn:2.l", "esp:GND.1", "black", [] ],
+
+    [ "esp:D25", "rRed:1", "red", [] ],
+    [ "rRed:2", "ledRed:A", "red", [] ],
+    [ "ledRed:C", "esp:GND.2", "black", [] ],
+
+    [ "esp:D33", "rGreen:1", "green", [] ],
+    [ "rGreen:2", "ledGreen:A", "green", [] ],
+    [ "ledGreen:C", "esp:GND.2", "black", [] ],
+
+    [ "esp:D27", "buzzer:1", "purple", [] ],
+    [ "buzzer:2", "esp:GND.2", "black", [] ],
+
+    [ "esp:D26", "relay:IN", "orange", [] ],
+    [ "esp:3V3", "relay:VCC", "red", [] ],
+    [ "esp:GND.1", "relay:GND", "black", [] ]
+  ],
+  "dependencies": {}
+}

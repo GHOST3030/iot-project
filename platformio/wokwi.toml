@@ -1,0 +1,9 @@
+# Wokwi configuration for this PlatformIO project.
+# 1) Build the firmware first:  pio run
+# 2) Start the Wokwi simulation (VS Code Wokwi extension, or wokwi.com CLI).
+# The simulator loads the compiled binary below and the circuit in diagram.json.
+
+[wokwi]
+version = 1
+firmware = '.pio/build/esp32doit-devkit-v1/firmware.bin'
+elf = '.pio/build/esp32doit-devkit-v1/firmware.elf'
